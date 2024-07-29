@@ -12,6 +12,11 @@ const MODE: Provider = process.env.BRAINTRUST_API_KEY
   ? "openai"
   : "openai"; // Default to OpenAI if no key is found
 
+/**
+ * Returns the model name based on the provided mode.
+ * @param {"anthropic"|"braintrust"|"openrouter"|"openai"} mode - The provider mode.
+ * @returns {string} The name of the model.
+ */
 const getModel = (mode: Provider) => {
   switch (mode) {
     case "anthropic":
@@ -24,6 +29,11 @@ const getModel = (mode: Provider) => {
   }
 };
 
+/**
+ * Creates an instance of OpenAI client based on the chosen AI provider mode. 
+ * @param {string}  mode - The mode which specifies the AI provider to be used (either 'openai', 'openrouter', 'anthropic', or 'braintrust').
+ * @returns {Object} An instance of OpenAI client configured with the base URL and API key corresponding to the chosen AI provider.
+ */
 const createClient = (mode: Provider) => {
   switch (mode) {
     case "openrouter":
