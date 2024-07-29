@@ -71,6 +71,11 @@ export type WindowAction =
   | { type: "SET_ICON"; payload: string }
   | { type: "UPDATE_PROGRAM"; payload: Partial<WindowState["program"]> };
 
+/**
+ * Atom family that generates a unique atom state for each unique key. These states represent individual windows in a virtual operating system. Each window is generated with a unique ID and managed by a reducer function.
+ * @param {string} id - Unique identifier for a window
+ * @returns {object} Returns an atomWithReducer, which includes the status, position, size, title, program, id, and loading state of the window
+ */
 export const windowAtomFamily = atomFamily((id: string) => {
   return atomWithReducer(
     {
@@ -90,6 +95,11 @@ export const windowAtomFamily = atomFamily((id: string) => {
 
 export const MIN_WINDOW_SIZE = { width: 300, height: 100 };
 
+/**
+ * This function is used to update the window size and ensures that it does not go below a certain size. It accepts an object with `width` and `height` attributes and returns a similar object.
+ * @param {object} size - An object representing the size of the window, with properties `width` and `height`. The height could optionally be "auto", in which case it is left unchanged.
+ * @returns {object} Returns an object with updated `width` and `height` values, ensuring the size does not go below a specified minimum (MIN_WINDOW_SIZE).
+ */
 function clampSize(size: WindowState["size"]): WindowState["size"] {
   return {
     width: Math.max(size.width, MIN_WINDOW_SIZE.width),
@@ -100,6 +110,13 @@ function clampSize(size: WindowState["size"]): WindowState["size"] {
   };
 }
 
+/**
+ * Reducer function to manage application window states such as toggling maximized or minimized window, moving window, 
+ * restoring normal mode, initializing window, resizing window, loading status, changing icon, and updating program.
+ * @param {WindowState}  state - The current state of the window.
+ * @param {WindowAction}  action - The action to be performed on the window state.
+ * @returns {WindowState} Updated state after performing given action.
+ */
 function windowReducer(state: WindowState, action: WindowAction): WindowState {
   switch (action.type) {
     case "TOGGLE_MAXIMIZE":
@@ -149,6 +166,21 @@ function windowReducer(state: WindowState, action: WindowAction): WindowState {
   return state;
 }
 
+/**
+ * This function handles the "RESIZE" event and updates the state based on the action payload.
+ * Following cases of window resizing from top, bottom, left, right and subcases of resizing corners are covered.
+ * Depending on the side of window getting resize, corresponding height and width in state gets updated.
+ * Window's X and Y position might also get adjusted during the process as needed.
+ *
+ * @param {Object} state - The initial state of the window containing its size and position. 
+ * The size object has two properties; width and height while the position object has two properties; x and y.
+ *
+ * @param {Object} action - The action object which fires off the window resize. 
+ * This includes a type property to indicate type of event and a payload property which indicates the side of window being resized and by how much (dx, dy).
+ *
+ * @returns {Object} This returns a new state as a result of window resize event.
+ * The return state includes updated size and possibly position of window after the resize action.
+ */
 function handleResize(state: WindowState, action: WindowAction) {
   if (action.type !== "RESIZE") {
     return state;
@@ -269,9 +301,20 @@ function handleResize(state: WindowState, action: WindowAction) {
   }
 }
 
+/**
+ * Concatenates a provided id with the string 'iframe-' to create a unique iframe ID.
+ * @param {string}  id - The unique identifier to be used in concatenation.
+ * @returns {string} The unique iframe ID.
+ */
+
 export function getIframeID(id: string) {
   return `iframe-${id}`;
 }
+
+/**
+ * Reloads the specified iframe by id. This function retrieves the default store, gets the window atom family of the provided id, checks if the window is an iframe, and gets the program atom family of the programID. An error is thrown if the program isn't found. The function then sets the programsAtom with an UPDATE_PROGRAM action, resetting the code to undefined. Finally, it retrieves the iframe using the given id and reloads it if it exists.
+ * @param {string}  id - The id of the iframe to reload.
+ */
 
 export function reloadIframe(id: string) {
   const store = getDefaultStore();
@@ -291,6 +334,15 @@ export function reloadIframe(id: string) {
   }
 }
 
+/**
+ * Retrieves an iframe from the document based on the provided id. 
+ * It constructs an element id from the provided id and attempts 
+ * to retrieve the corresponding iframe from the document.
+ * In case no matching iframe is found, returns null.
+ *
+ * @param {string} id - The id of the desired iframe element
+ * @returns {HTMLIFrameElement | null} Either the found HTMLIFrameElement or null if no such element exists.
+ */
 export function getIframe(id: string): HTMLIFrameElement | null {
   return document.getElementById(getIframeID(id)) as HTMLIFrameElement | null;
 }
