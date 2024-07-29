@@ -9,6 +9,11 @@ import { Run } from "./programs/Run";
 import { Help } from "./programs/Help";
 import { Explorer } from "./programs/Explorer";
 
+/**
+ * Renders a component based on the state's program type.
+ * @param {{ state: WindowState }} Object that contains WindowState - Describes the state of the window, which determines the type of component to render.
+ * @returns {JSX.Element} A JSX element according to the program type in the state.
+ */
 export function WindowBody({ state }: { state: WindowState }) {
   switch (state.program.type) {
     case "welcome":

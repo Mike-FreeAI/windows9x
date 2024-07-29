@@ -10,6 +10,13 @@ export const metadata: Metadata = {
   description: "The future of yesterday",
 };
 
+/**
+ * A functional component responsible for rendering children in a predefined HTML layout.
+ * @param {object} props - Object that contains the properties of RootLayout.
+ * @param {React.ReactNode} props.children - React Children of the function.
+ * @returns {JSX.Element} HTML content with children.
+ */
+
 export default function RootLayout({
   children,
 }: Readonly<{

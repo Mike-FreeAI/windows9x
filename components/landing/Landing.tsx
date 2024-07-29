@@ -15,6 +15,15 @@ import Image, { StaticImageData } from "next/image";
 import CountDown from "./CountDown";
 import { Form, SignUpState } from "./Form";
 
+/**
+ * This is an asynchronous function that signs up a user to a waitlist by sending a POST request to 
+ * a specified URL. The email is validated using a pattern before the request. In case of any failure in 
+ * request or validation, an error message is returned.
+ * @param {SignUpState} _prevState - Unused argument maintained for consistency
+ * @param {FormData} formData - Form data received from user input, which should include the "email" field.
+ * @returns {Promise<SignUpState>} Returns a promise that resolves to an object. This object represents the state of 
+ * the sign-up process. It can be a success state, or an error state with an associated error message.
+ */
 async function signUp(
   _prevState: SignUpState,
   formData: FormData
@@ -44,6 +53,15 @@ async function signUp(
   }
   return { type: "success" };
 }
+
+/**
+ * Functional component for a Landing page UI.
+ * This component renders the landing page of the Windows 9X Setup simulation.
+ * It depicts a series of steps such as 'Preparing to run Windows 9X Setup',
+ * 'Collecting information about your computer', etc.
+ * It also includes a logo, a countdown, and an info box, along with a signup form.
+ * @returns {JSX.Element} The Landing page component.
+ */
 
 export const Landing = () => {
   return (
@@ -136,6 +154,14 @@ export const Landing = () => {
     </div>
   );
 };
+
+/**
+ * A functional component that renders a step with an icon and optionally highlighted text.
+ * @param {string | StaticImageData}  iconSrc - The source of the icon image to be displayed.
+ * @param {React.ReactNode} children - Any valid React child elements.
+ * @param {boolean} [isHighlighted=false] - A boolean which if true, applies a highlight style to the child elements.
+ * @returns {JSX.Element} Returns a div element containing an image and optionally highlighted child components.
+ */
 
 function Step({
   iconSrc,

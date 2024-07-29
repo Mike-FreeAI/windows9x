@@ -2,6 +2,12 @@ import { MODEL, openai } from "@/ai/client";
 import isLive from "@/lib/isLive";
 import { ChatCompletionCreateParamsStreaming } from "openai/resources/index.mjs";
 
+/**
+ * Fetches an image from the request's URL, decode it and create a stream of it.
+ * @param {Request} req - The Request object from client
+ * @returns {Response} Returns a response object with the content being a decoded image stream. Returns error if application is not live or no image is present.
+ */
+
 export function GET(req: Request) {
   if (!isLive) {
     return new Response(JSON.stringify({ error: "Not live" }), { status: 400 });
@@ -50,6 +56,11 @@ export function GET(req: Request) {
             }
           }
         }
+        /**
+         * Wraps the setTimeout method in a Promise. Waits for a specified amount of time, then resolves the promise.
+         * @param {function} resolve - A function that gets called when the promise is to be resolved.
+         * @returns {Promise} Returns an instance of Promise that waits for a specified time before resolving.
+         */
         await new Promise((resolve) => setTimeout(resolve, 50));
         controller.close();
       },
@@ -92,6 +103,11 @@ Treat their ideas as the seeds of an ever-expanding operating-system limited onl
 Ensure the HTML you generate remains intuitive and immersive, allowing the user to lose themselves in exploring the captivating reality you're co-creating. 
 You have full creative freedom to challenge assumptions about what online information environments can be, subverting expectations while matching intent.`;
 
+/**
+ * Asynchronously creates a program stream with an image and messages for OpenAI's chat completions.
+ * @param {string}  image - The URL of the image to be processed.
+ * @returns {Promise<object>} Returns a Promise for the stream object from OpenAI's chat completions.
+ */
 async function createProgramStream(image: string) {
   const params: ChatCompletionCreateParamsStreaming = {
     messages: [

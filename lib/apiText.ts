@@ -1,3 +1,10 @@
+/**
+ * This function generates a TypeScript API text in Markdown format. The API text gives a guide on using global variables and registry in TypeScript.
+ * The resultant API Text is surrounded in three backticks to format as code block when written in markdown files.
+ * 
+ * @param {string[]} keys - An array of strings where each string is a registry key
+ * @returns {string} - A string of API text in TypeScript to be written in markdown. This string provides information about global chat and registry variables and how to use them.
+ */
 export const getApiText = (keys: string[]) => `\`\`\`typescript
 declare global {
   // Chat lets you use an LLM to generate a response. 
@@ -33,6 +40,11 @@ declare global {
 // If the key can be written by other apps, it should be prefixed with "public_"
 //
 // You can define your own registry keys or use one of these known keys:
+/**
+ * Function maps an array of keys, prepending each one with a '//' to generate a string of comments.
+ * @param {Array}  keys - An array of keys which are to be prepended with '//'. 
+ * @returns {String} A string of keys with each key prepended by '//' and separated by '\n'.
+ */
 ${keys.map((key) => `// ${key}`).join("\n")}
 interface Registry {
   get(key: string): Promise<any>;

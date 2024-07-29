@@ -1,5 +1,10 @@
 const url = "https://sdk.photoroom.com/v1/segment";
 
+/**
+ * An async function to remove the background from a given image blob.
+ * @param {Blob}  blob - The blob from which the background needs to be removed.
+ * @returns {Promise<Blob>} A promise that resolves with the blob of the image without background.
+ */
 export async function removeBackground(blob: Blob): Promise<Blob> {
   const formData = new FormData();
   formData.append("image_file", new File([blob], "image.png"));

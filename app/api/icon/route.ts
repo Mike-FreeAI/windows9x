@@ -5,6 +5,18 @@ import { put } from "@/lib/put";
 
 const REMOVE_BG = false;
 
+/**
+ * Handler for POST requests to generate an image icon
+ * This function will do several things:
+ * - It will check if the server is live, if not it will reject the request.
+ * - It will extract the image prompt from the request body.
+ * - It will use the prompt to generate a cloudflare image.
+ * - If the REMOVE_BG flag is set, it will remove the background from the image.
+ * - The image is then stored in the 'icons' directory with a unique name.
+ * 
+ * @param {Request}  req - The input request, should contain a 'name' field in its body
+ * @returns {Promise<Response>} The response containing either an error message or the path of the generated image
+ */
 export async function POST(req: Request) {
   if (!isLive) {
     return new Response(JSON.stringify({ error: "Not live" }), { status: 400 });
@@ -28,6 +40,10 @@ export async function POST(req: Request) {
   return new Response(path, { status: 200 });
 }
 
+/**
+ * Function for generating a unique identification string.
+ * @returns {string} A unique 28-character alphanumeric string.
+ */
 function generateUniqueID() {
   return (
     Math.random().toString(36).substring(2, 15) +
@@ -37,6 +53,11 @@ function generateUniqueID() {
 
 const imageDescriptionPrompt = `You are a master icon designer for Microsoft in the 90s. A user will give you the name of an exe and you will describe an icon for it. Return an object or symbol that should be used as an icon. Return only the object or symbol`;
 
+/**
+ * Generates an image prompt using OpenAI's API.
+ * @param {string} name - The name that will be used as user content for message creation.
+ * @returns {Promise<string>} A promise that resolves to a string containing a message content, with additional static elements appended.
+ */
 async function genImagePrompt(name: string) {
   const result = await openai.chat.completions.create({
     model: MODEL,
@@ -49,6 +70,11 @@ async function genImagePrompt(name: string) {
   return result.choices[0].message.content + ", icon, 32x32, 16 colors";
 }
 
+/**
+ * Generates an image using Cloudflare's diffusion AI API, sending a POST request with the given prompt
+ * @param {string} prompt - The string prompt to be sent in the body of the POST request
+ * @returns {Promise<Blob | null>} A promise that resolves to the Blob image data if the request was successful, and null otherwise
+ */
 async function genCloudflareImage(prompt: string): Promise<Blob | null> {
   const options = {
     method: "POST",
