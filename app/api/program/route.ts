@@ -5,6 +5,12 @@ import { getApiText } from "@/lib/apiText";
 
 import isLive from "@/lib/isLive";
 
+/**
+ * An asynchronous function for handling GET requests. It constitutes an error response when it's not live and also returns a response with HTML content with the requested program stream. 
+ * The function also performs error handling with inappropriate descriptions.
+ * @param {Request}  req - The HTTP request object from the client which includes the URL and search parameters.
+ * @returns {Response} The function either returns a response object with an error message or a response that includes HTML content with the requested program stream.
+ */
 export async function GET(req: Request) {
   if (!isLive) {
     return new Response(JSON.stringify({ error: "Not live" }), { status: 400 });
@@ -41,6 +47,14 @@ href="https://unpkg.com/98.css"
   );
 }
 
+/**
+ * Creates a script for developers to create an application targeting the Windows9X OS.
+ * This function provides instructions for an application to be executed on an imaginary OS, Windows9X.
+ * It uses 98.css library to give it a classic-lookalike feel.
+ * Requirements for code implementation (HTML, CSS, JavaScript) are detailed.
+ * @param {array} keys - Names of the API defined on window that can be used by the application.
+ * @returns {string} Instructional script for developing a Windows9X supporting application.
+ */
 function makeSystem(keys: string[]) {
   console.log(keys);
   return `You will be creating a fantastical application for the Windows9X operating system, an alternate reality version of Windows from 199X. I will provide you with the name of an application exe file, and your job is to imagine what that application would do and generate the code to implement it.
@@ -67,6 +81,12 @@ ${getApiText(keys)}
 `;
 }
 
+/**
+ * Creates a program stream with specified description and keys.
+ * @param {string}  desc - Description for the program.
+ * @param {string[]}  keys - Keys related to the program.
+ * @returns {Promise} Returns a Promise that resolves to a stream object.
+ */
 async function createProgramStream(desc: string, keys: string[]) {
   const params = {
     messages: [
