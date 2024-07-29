@@ -3,6 +3,14 @@ import { extractXMLTag } from "@/lib/extractXMLTag";
 
 import isLive from "@/lib/isLive";
 
+/**
+ * Asynchronous function to handle POST requests. It uses the OpenAI API's chat model to generate completions
+ * and return a formatted response. If the application is not live, it returns an error response.
+ * The application name is extracted from the XML tag 'appname' in the response content.
+ * @param {Request}  req - The incoming HTTP request
+ * @returns {Response} Response with name extracted from API response, 
+ *                     or an error response if application is not live
+ */
 export async function POST(req: Request) {
   if (!isLive) {
     return new Response(JSON.stringify({ error: "Not live" }), { status: 400 });
